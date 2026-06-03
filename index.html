@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>THACO Auto – Ứng dụng mua xe & dịch vụ</title>
+  <meta name="description" content="Mua xe, đặt dịch vụ bảo hành, sửa chữa, đăng kiểm – tất cả trong một ứng dụng THACO Auto."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE WRAPPER
+══════════════════════════════════════════════════════ -->
+<div id="app-root">
+
+  <!-- ── SPLASH ─────────────────────────────────────────── -->
+  <div id="pg-splash" class="page visible">
+    <div class="splash-orb o1"></div>
+    <div class="splash-orb o2"></div>
+    <div class="splash-orb o3"></div>
+    <div class="splash-center">
+      <div class="splash-logo-img">
+        <img src="assets/thaco-auto-logo-png.png" alt="THACO Auto" class="splash-logo-real"/>
+      </div>
+      <p class="splash-slogan">Đồng hành cùng mọi hành trình</p>
+      <div class="splash-bar"><div class="splash-progress" id="splash-progress"></div></div>
+    </div>
+  </div>
+
+  <!-- ── LOGIN ──────────────────────────────────────────── -->
+  <div id="pg-login" class="page hidden">
+    <div class="login-hero">
+      <div class="login-hero-overlay"></div>
+      <div class="login-hero-content">
+        <div class="lh-logo">
+          <img src="assets/thaco-auto-logo-png.png" alt="THACO Auto" class="lh-logo-img"/>
+        </div>
+        <h1>Chào mừng trở lại</h1>
+        <p>Mua xe · Bảo hành · Dịch vụ</p>
+      </div>
+    </div>
+
+    <div class="login-card">
+      <div class="login-tabs">
+        <button id="lt-login" class="ltab active" onclick="switchLoginTab('login')">Đăng nhập</button>
+        <button id="lt-lookup" class="ltab" onclick="switchLoginTab('lookup')">Tra cứu đơn hàng</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="lf-login">
+        <div class="field-group">
+          <label>Số điện thoại / Email</label>
+          <div class="field-wrap">
+            <span class="fi">📱</span>
+            <input id="f-phone" type="text" placeholder="0901 234 567" value="0901234567"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Mật khẩu</label>
+          <div class="field-wrap">
+            <span class="fi">🔒</span>
+            <input id="f-pass" type="password" placeholder="Mật khẩu" value="password"/>
+            <button class="fi-btn" onclick="togglePw('f-pass',this)" title="Hiện/ẩn mật khẩu">👁</button>
+          </div>
+        </div>
+        <div class="login-meta">
+          <label class="remember-me"><input type="checkbox" checked/> Ghi nhớ</label>
+          <a href="#" class="link-sm">Quên mật khẩu?</a>
+        </div>
+        <button class="btn-cta" id="btn-login" onclick="doLogin()">Đăng nhập →</button>
+        <div class="or-divider"><span>hoặc tiếp tục với</span></div>
+        <div class="social-row">
+          <button class="btn-social" onclick="doSocialLogin('Zalo')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#0068FF"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Zalo
+          </button>
+          <button class="btn-social" onclick="doSocialLogin('Google')">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Google
+          </button>
+        </div>
+        <p class="register-cta">Chưa có tài khoản? <a href="#" class="link-primary">Đăng ký miễn phí</a></p>
+      </div>
+
+      <!-- LOOKUP FORM -->
+      <div id="lf-lookup" class="hidden">
+        <div class="lookup-info-box">💡 Không cần đăng nhập – nhập số hợp đồng để theo dõi đơn hàng</div>
+        <div class="field-group">
+          <label>Số hợp đồng / Số khung VIN</label>
+          <div class="field-wrap">
+            <span class="fi">📋</span>
+            <input id="f-contract" type="text" placeholder="VD: HD-2026-X987" value="HD-2026-X987"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Tên khách hàng</label>
+          <div class="field-wrap">
+            <span class="fi">👤</span>
+            <input id="f-cname" type="text" placeholder="Nguyễn Văn A" value="Nguyễn Văn A"/>
+          </div>
+        </div>
+        <button class="btn-cta" onclick="doLookup()">Tra cứu ngay →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HOME (MAIN DASHBOARD) ──────────────────────────── -->
+  <div id="pg-home" class="page hidden">
+    <!-- Header -->
+    <header class="app-header" id="main-header">
+      <div class="header-left">
+        <img src="assets/thaco-auto-logo-png.png" alt="THACO Auto" class="hdr-logo-img"/>
+      </div>
+      <div class="header-right">
+        <button class="hdr-icon" onclick="navigate('pg-notifications')" title="Thông báo">
+          🔔<span class="badge-dot"></span>
+        </button>
+        <div class="hdr-avatar" onclick="navigate('pg-profile')">NV</div>
+      </div>
+    </header>
+
+    <div class="home-scroll" id="home-scroll">
+      <!-- Greeting -->
+      <div class="home-greeting">
+        <div>
+          <p class="greet-sub">Xin chào, 👋</p>
+          <h2 class="greet-name">Nguyễn Văn A</h2>
+        </div>
+        <div class="loyalty-chip">🥇 Thành viên Vàng</div>
+      </div>
+
+      <!-- Active Order Banner -->
+      <div class="order-banner" onclick="navigate('pg-order-tracking')">
+        <div class="ob-left">
+          <div class="ob-icon">🏭</div>
+          <div class="ob-info">
+            <span class="ob-badge">Đang xử lý</span>
+            <p class="ob-name">Mazda CX-5 2026</p>
+            <p class="ob-sub">HD-2026-X987 · Đang kiểm định chất lượng</p>
+          </div>
+        </div>
+        <div class="ob-right">
+          <div class="ob-progress-ring">
+            <svg width="48" height="48" viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="19" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+              <circle cx="24" cy="24" r="19" fill="none" stroke="white" stroke-width="4"
+                stroke-dasharray="119.4" stroke-dashoffset="53.7" stroke-linecap="round"
+                transform="rotate(-90 24 24)"/>
+            </svg>
+            <span class="ob-pct">55%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services Grid -->
+      <h3 class="section-label">Dịch vụ của chúng tôi</h3>
+      <div class="services-grid">
+        <div class="svc-card primary-svc" onclick="navigate('pg-buy-car')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#1a6fd4,#0a3d8f)">🚗</div>
+          <p class="svc-name">Mua xe</p>
+          <p class="svc-desc">Khám phá dòng xe & đặt mua</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-service-booking')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#f59e0b,#d97706)">🔧</div>
+          <p class="svc-name">Sửa chữa</p>
+          <p class="svc-desc">Đặt lịch sửa xe nhanh</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-warranty')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#22c55e,#16a34a)">🛡️</div>
+          <p class="svc-name">Bảo hành</p>
+          <p class="svc-desc">Kiểm tra & yêu cầu bảo hành</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-service-booking')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">📋</div>
+          <p class="svc-name">Bảo dưỡng</p>
+          <p class="svc-desc">Bảo dưỡng định kỳ</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-registration')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#06b6d4,#0891b2)">📝</div>
+          <p class="svc-name">Đăng kiểm</p>
+          <p class="svc-desc">Hỗ trợ đăng ký & đăng kiểm</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-dealer')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#f43f5e,#e11d48)">📍</div>
+          <p class="svc-name">Showroom</p>
+          <p class="svc-desc">Tìm đại lý gần bạn</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-finance')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#10b981,#059669)">💰</div>
+          <p class="svc-name">Vay mua xe</p>
+          <p class="svc-desc">Tính lãi suất, vay nhanh</p>
+        </div>
+        <div class="svc-card" onclick="navigate('pg-accessories')">
+          <div class="svc-icon-wrap" style="background:linear-gradient(135deg,#f97316,#ea580c)">⚙️</div>
+          <p class="svc-name">Phụ kiện</p>
+          <p class="svc-desc">Nâng cấp xe chính hãng</p>
+        </div>
+      </div>
+
+      <!-- Promotions -->
+      <div class="promo-row">
+        <h3 class="section-label">Ưu đãi đặc biệt</h3>
+        <a href="#" class="see-all" onclick="return false">Tất cả</a>
+      </div>
+      <div class="promo-scroll">
+        <div class="promo-card pc1">
+          <div class="promo-badge">HOT</div>
+          <p class="promo-title">Giảm 50 triệu tiền mặt</p>
+          <p class="promo-desc">Mazda CX-5 tháng 6/2026</p>
+          <button class="promo-btn" onclick="navigate('pg-buy-car')">Xem ngay</button>
+        </div>
+        <div class="promo-card pc2">
+          <div class="promo-badge">MỚI</div>
+          <p class="promo-title">Gói bảo dưỡng 0 đồng</p>
+          <p class="promo-desc">Khi mua xe Kia tháng này</p>
+          <button class="promo-btn" onclick="navigate('pg-buy-car')">Tìm hiểu</button>
+        </div>
+        <div class="promo-card pc3">
+          <div class="promo-badge">20%</div>
+          <p class="promo-title">Giảm phụ kiện chính hãng</p>
+          <p class="promo-desc">Đến hết 30/06/2026</p>
+          <button class="promo-btn" onclick="navigate('pg-accessories')">Mua ngay</button>
+        </div>
+      </div>
+
+      <!-- Featured Cars -->
+      <div class="promo-row">
+        <h3 class="section-label">Xe nổi bật</h3>
+        <a href="#" class="see-all" onclick="navigate('pg-buy-car'); return false">Tất cả</a>
+      </div>
+      <div class="featured-cars">
+        <div class="fc-card" onclick="navigate('pg-car-detail-cx5')">
+          <div class="fc-img-wrap">
+            <img src="assets/mazda_cx5.png" alt="Mazda CX-5" class="fc-img" loading="lazy"/>
+            <span class="fc-brand-badge">Mazda</span>
+          </div>
+          <div class="fc-info">
+            <h4 class="fc-name">CX-5 2026</h4>
+            <p class="fc-spec">2.0L SkyActiv · SUV 5 chỗ</p>
+            <p class="fc-price">Từ <strong>799 triệu</strong></p>
+            <button class="fc-cta" onclick="event.stopPropagation(); navigate('pg-test-drive')">Lái thử</button>
+          </div>
+        </div>
+        <div class="fc-card" onclick="navigate('pg-buy-car')">
+          <div class="fc-img-wrap">
+            <img src="assets/kia_sorento.png" alt="Kia Sorento" class="fc-img" loading="lazy"/>
+            <span class="fc-brand-badge kia-badge">Kia</span>
+          </div>
+          <div class="fc-info">
+            <h4 class="fc-name">Sorento 2026</h4>
+            <p class="fc-spec">2.5T AWD · SUV 7 chỗ</p>
+            <p class="fc-price">Từ <strong>1,099 triệu</strong></p>
+            <button class="fc-cta" onclick="event.stopPropagation(); navigate('pg-test-drive')">Lái thử</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="bn-item active" id="bn-home" onclick="navActive('bn-home')">
+        <span class="bn-ico">🏠</span><span class="bn-lbl">Trang chủ</span>
+      </button>
+      <button class="bn-item" id="bn-order" onclick="navActive('bn-order'); navigate('pg-order-tracking')">
+        <span class="bn-ico">📦</span><span class="bn-lbl">Đơn hàng</span>
+      </button>
+      <button class="bn-fab" onclick="navigate('pg-service-booking')">
+        <span>🔧</span>
+      </button>
+      <button class="bn-item" id="bn-car" onclick="navActive('bn-car'); navigate('pg-my-vehicle')">
+        <span class="bn-ico">🚗</span><span class="bn-lbl">Xe của tôi</span>
+      </button>
+      <button class="bn-item" id="bn-profile" onclick="navActive('bn-profile'); navigate('pg-profile')">
+        <span class="bn-ico">👤</span><span class="bn-lbl">Tài khoản</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ── BUY CAR ─────────────────────────────────────────── -->
+  <div id="pg-buy-car" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Mua xe</h2>
+      <button class="hdr-icon">🔍</button>
+    </header>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <button class="chip active">Tất cả</button>
+      <button class="chip">Mazda</button>
+      <button class="chip">Kia</button>
+      <button class="chip">Peugeot</button>
+      <button class="chip">Thaco Bus</button>
+    </div>
+
+    <div class="page-scroll">
+      <!-- Sort row -->
+      <div class="sort-row">
+        <span class="sort-count">4 mẫu xe</span>
+        <select class="sort-select">
+          <option>Mới nhất</option>
+          <option>Giá tăng dần</option>
+          <option>Giá giảm dần</option>
+        </select>
+      </div>
+
+      <!-- Car Listing Cards -->
+      <div class="car-list">
+        <div class="car-list-card" onclick="navigate('pg-car-detail-cx5')">
+          <div class="clc-img-wrap">
+            <img src="assets/mazda_cx5.png" alt="Mazda CX-5" class="clc-img"/>
+            <span class="clc-badge hot">Bán chạy</span>
+          </div>
+          <div class="clc-body">
+            <div class="clc-brand">Mazda</div>
+            <h3 class="clc-name">CX-5 2026</h3>
+            <p class="clc-spec">2.0L SkyActiv-G 165 mã lực · 6AT · AWD</p>
+            <div class="clc-tags">
+              <span class="tag">Camera 360°</span>
+              <span class="tag">Apple CarPlay</span>
+              <span class="tag">Ghế thông hơi</span>
+            </div>
+            <div class="clc-footer">
+              <div class="clc-price">
+                <span class="price-from">Từ</span>
+                <span class="price-main">799 triệu</span>
+                <span class="price-promo">Giảm 50tr tháng 6</span>
+              </div>
+              <div class="clc-actions">
+                <button class="btn-outline-sm" onclick="event.stopPropagation(); navigate('pg-test-drive')">Lái thử</button>
+                <button class="btn-primary-sm" onclick="event.stopPropagation(); navigate('pg-car-detail-cx5')">Mua ngay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="car-list-card" onclick="navigate('pg-buy-car')">
+          <div class="clc-img-wrap">
+            <img src="assets/kia_sorento.png" alt="Kia Sorento" class="clc-img"/>
+            <span class="clc-badge new">Mới 2026</span>
+          </div>
+          <div class="clc-body">
+            <div class="clc-brand">Kia</div>
+            <h3 class="clc-name">Sorento 2026</h3>
+            <p class="clc-spec">2.5T Turbo 281 mã lực · 8DCT · AWD</p>
+            <div class="clc-tags">
+              <span class="tag">7 chỗ ngồi</span>
+              <span class="tag">Panorama roof</span>
+              <span class="tag">HDA2</span>
+            </div>
+            <div class="clc-footer">
+              <div class="clc-price">
+                <span class="price-from">Từ</span>
+                <span class="price-main">1,099 triệu</span>
+                <span class="price-promo">Tặng gói BH 1 năm</span>
+              </div>
+              <div class="clc-actions">
+                <button class="btn-outline-sm" onclick="event.stopPropagation(); navigate('pg-test-drive')">Lái thử</button>
+                <button class="btn-primary-sm">Mua ngay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="car-list-card" onclick="navigate('pg-buy-car')">
+          <div class="clc-img-wrap">
+            <img src="assets/peugeot_3008.png" alt="Peugeot 3008" class="clc-img"/>
+            <span class="clc-badge premium">Premium</span>
+          </div>
+          <div class="clc-body">
+            <div class="clc-brand">Peugeot</div>
+            <h3 class="clc-name">3008 2026</h3>
+            <p class="clc-spec">1.6T PureTech 180 mã lực · 8AT · FWD</p>
+            <div class="clc-tags">
+              <span class="tag">i-Cockpit</span>
+              <span class="tag">Massage seat</span>
+              <span class="tag">Night Vision</span>
+            </div>
+            <div class="clc-footer">
+              <div class="clc-price">
+                <span class="price-from">Từ</span>
+                <span class="price-main">1,199 triệu</span>
+                <span class="price-promo">Lãi suất 0% 12 tháng</span>
+              </div>
+              <div class="clc-actions">
+                <button class="btn-outline-sm" onclick="event.stopPropagation(); navigate('pg-test-drive')">Lái thử</button>
+                <button class="btn-primary-sm">Mua ngay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="car-list-card" onclick="navigate('pg-buy-car')">
+          <div class="clc-img-wrap">
+            <img src="assets/mazda_cx8.png" alt="Mazda CX-8" class="clc-img"/>
+          </div>
+          <div class="clc-body">
+            <div class="clc-brand">Mazda</div>
+            <h3 class="clc-name">CX-8 2026</h3>
+            <p class="clc-spec">2.5L SkyActiv 194 mã lực · 6AT · AWD</p>
+            <div class="clc-tags">
+              <span class="tag">7 chỗ hạng sang</span>
+              <span class="tag">Bose Audio</span>
+            </div>
+            <div class="clc-footer">
+              <div class="clc-price">
+                <span class="price-from">Từ</span>
+                <span class="price-main">1,049 triệu</span>
+              </div>
+              <div class="clc-actions">
+                <button class="btn-outline-sm" onclick="event.stopPropagation(); navigate('pg-test-drive')">Lái thử</button>
+                <button class="btn-primary-sm">Mua ngay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── CAR DETAIL CX-5 ─────────────────────────────────── -->
+  <div id="pg-car-detail-cx5" class="page hidden">
+    <div class="cd-hero-wrap">
+      <button class="float-back" onclick="goBack()">‹</button>
+      <img src="assets/mazda_cx5.png" alt="Mazda CX-5" class="cd-hero-img"/>
+      <div class="cd-hero-overlay">
+        <span class="clc-brand" style="color:rgba(255,255,255,.7)">Mazda</span>
+        <h1 class="cd-hero-name">CX-5 2026</h1>
+        <p class="cd-hero-price">Từ <strong>799 triệu đồng</strong></p>
+      </div>
+    </div>
+
+    <div class="page-scroll cd-scroll">
+      <div class="cd-tab-bar">
+        <button class="cd-tab active" onclick="cdTab(this)">Tổng quan</button>
+        <button class="cd-tab" onclick="cdTab(this)">Thông số</button>
+        <button class="cd-tab" onclick="cdTab(this)">Màu sắc</button>
+        <button class="cd-tab" onclick="cdTab(this)">Giá lăn bánh</button>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Điểm nổi bật</h3>
+        <div class="highlights-grid">
+          <div class="hl"><span>📷</span><p>Camera 360°</p></div>
+          <div class="hl"><span>🍎</span><p>Apple CarPlay</p></div>
+          <div class="hl"><span>🌬️</span><p>Ghế thông hơi</p></div>
+          <div class="hl"><span>🛡️</span><p>An toàn 5 sao</p></div>
+          <div class="hl"><span>🎵</span><p>BOSE Audio</p></div>
+          <div class="hl"><span>🤖</span><p>Lane Keep</p></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Thông số kỹ thuật</h3>
+        <div class="spec-table">
+          <div class="st-row"><span>Động cơ</span><span>2.0L SkyActiv-G</span></div>
+          <div class="st-row"><span>Công suất tối đa</span><span>165 mã lực / 6000 rpm</span></div>
+          <div class="st-row"><span>Mô-men xoắn</span><span>213 Nm / 4000 rpm</span></div>
+          <div class="st-row"><span>Hộp số</span><span>Tự động 6 cấp</span></div>
+          <div class="st-row"><span>Dẫn động</span><span>2 cầu i-ACTIV AWD</span></div>
+          <div class="st-row"><span>Tiêu thụ nhiên liệu</span><span>7.2 L/100km</span></div>
+          <div class="st-row"><span>Kích thước (D×R×C)</span><span>4,575×1,842×1,676 mm</span></div>
+          <div class="st-row"><span>Bảo hành</span><span>3 năm / 100,000 km</span></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Phiên bản & Giá</h3>
+        <div class="variant-list">
+          <div class="variant-item">
+            <div><p class="v-name">CX-5 2.0 AT (2WD)</p><p class="v-spec">Dẫn động 1 cầu</p></div>
+            <span class="v-price">799 tr</span>
+          </div>
+          <div class="variant-item selected-v">
+            <div><p class="v-name">CX-5 2.0 AT AWD</p><p class="v-spec">Dẫn động 2 cầu · Phổ biến nhất</p></div>
+            <span class="v-price">879 tr</span>
+          </div>
+          <div class="variant-item">
+            <div><p class="v-name">CX-5 2.5 AT AWD Premium</p><p class="v-spec">Đỉnh phiên bản</p></div>
+            <span class="v-price">999 tr</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card cta-card">
+        <button class="btn-cta" onclick="navigate('pg-test-drive')">🚗 Đăng ký lái thử miễn phí</button>
+        <button class="btn-outline-full mt-8" onclick="navigate('pg-finance')">💰 Tính toán vay mua xe</button>
+        <button class="btn-outline-full mt-8" onclick="navigate('pg-dealer')">📍 Tìm showroom gần bạn</button>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── ORDER TRACKING ─────────────────────────────────── -->
+  <div id="pg-order-tracking" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Tiến độ đơn hàng</h2>
+      <button class="hdr-icon" onclick="showToast('📤 Đã sao chép liên kết!')">⬆</button>
+    </header>
+    <div class="page-scroll">
+      <!-- Contract bar -->
+      <div class="contract-bar">
+        <div class="cb-avatar">NV</div>
+        <div class="cb-info">
+          <p class="cb-name">Ông NGUYỄN VĂN A</p>
+          <p class="cb-id">HD-2026-X987</p>
+        </div>
+        <button class="cb-btn" onclick="showToast('📋 Đang tải hợp đồng...')">Hợp đồng ›</button>
+      </div>
+
+      <!-- Status hero -->
+      <div class="status-hero pqc">
+        <div class="sh-icon">🏭</div>
+        <div>
+          <p class="sh-title">Xe đang kiểm định chất lượng</p>
+          <p class="sh-sub">Dự kiến xuất kho: 25/06/2026 · Nhà máy Chu Lai</p>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="info-card">
+        <h3 class="ic-title">Hành trình đơn hàng</h3>
+        <div class="timeline">
+          <div class="tl-step done">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-line done"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Đặt cọc / Ký hợp đồng</p>
+              <p class="tl-dt">19/12/2024 · 21:30</p>
+            </div>
+          </div>
+          <div class="tl-step done">
+            <div class="tl-dot done">✓</div>
+            <div class="tl-line done"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Chuẩn bị sản xuất & Lắp ráp</p>
+              <p class="tl-dt">01/01/2025 · 08:00</p>
+            </div>
+          </div>
+          <div class="tl-step active">
+            <div class="tl-dot active"><span class="pulse"></span></div>
+            <div class="tl-line pending"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Kiểm định chất lượng (QC)</p>
+              <p class="tl-dt active-txt">● Đang thực hiện</p>
+              <div class="tl-chip">🔍 QC đang kiểm tra tại Chu Lai</div>
+            </div>
+          </div>
+          <div class="tl-step pending">
+            <div class="tl-dot pending"></div>
+            <div class="tl-line pending"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Xuất kho & Vận chuyển</p>
+              <p class="tl-dt">Dự kiến 25/06/2026</p>
+            </div>
+          </div>
+          <div class="tl-step pending">
+            <div class="tl-dot pending"></div>
+            <div class="tl-line pending"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Xe về Showroom</p>
+              <p class="tl-dt">Dự kiến 28/06/2026</p>
+            </div>
+          </div>
+          <div class="tl-step pending">
+            <div class="tl-dot pending"></div>
+            <div class="tl-line pending"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Đăng kiểm / Biển số</p>
+              <p class="tl-dt">Sau khi xe về showroom</p>
+            </div>
+          </div>
+          <div class="tl-step pending last">
+            <div class="tl-dot pending"></div>
+            <div class="tl-body">
+              <p class="tl-ev">Bàn giao xe</p>
+              <p class="tl-dt">Chờ cập nhật</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Car info -->
+      <div class="info-card car-mini-card">
+        <img src="assets/mazda_cx5.png" alt="Mazda CX-5" style="width:100%;border-radius:10px;object-fit:cover;height:130px"/>
+        <div class="cm-rows">
+          <div class="cm-row"><span>Model</span><span>Mazda CX-5 2.0L AWD</span></div>
+          <div class="cm-row"><span>Màu sắc</span><span>🔴 Đỏ Soul</span></div>
+          <div class="cm-row"><span>Phụ kiện</span><span>Camera 360, CarPlay</span></div>
+        </div>
+      </div>
+
+      <div style="height:80px"></div>
+    </div>
+
+    <div class="sticky-footer">
+      <button class="sf-ghost" onclick="navigate('pg-chat')">💬 Chat TVBH</button>
+      <button class="sf-primary" onclick="navigate('pg-service-support')">Yêu cầu hỗ trợ</button>
+    </div>
+  </div>
+
+  <!-- ── DEALER + GOOGLE MAP ────────────────────────────── -->
+  <div id="pg-dealer" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Tìm Showroom</h2>
+      <span></span>
+    </header>
+
+    <!-- Search bar -->
+    <div class="map-search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Tìm theo tỉnh thành, quận huyện..." id="map-search"/>
+    </div>
+
+    <!-- Google Maps Embed -->
+    <div class="map-container">
+      <iframe
+        id="gmap-frame"
+        title="Bản đồ Showroom THACO Auto"
+        src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d62716.36040855494!2d106.61808!3d10.7769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sMazda+showroom+Ho+Chi+Minh+City!5e0!3m2!1svi!2svn!4v1717395600000!5m2!1svi!2svn"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <div class="map-loading-overlay" id="map-loading">
+        <div class="map-loading-inner">
+          <div class="map-spin"></div>
+          <p>Đang tải bản đồ...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dealer List -->
+    <div class="page-scroll dealer-scroll">
+      <h3 class="section-label" style="margin-top:12px">Showroom gần bạn</h3>
+      <div class="dealer-list">
+        <div class="dealer-card" onclick="focusMap('mazda-truong-chinh')">
+          <div class="dc-icon" style="background:linear-gradient(135deg,#c0392b,#e74c3c)">M</div>
+          <div class="dc-info">
+            <p class="dc-name">Mazda Trường Chinh</p>
+            <p class="dc-addr">📍 123 Trường Chinh, Quận 12, TP.HCM</p>
+            <p class="dc-hours">🕐 8:00 – 18:00 · Thứ 2 đến Chủ nhật</p>
+            <div class="dc-svc-tags">
+              <span class="tag">Bán hàng</span><span class="tag">Dịch vụ</span><span class="tag">Phụ kiện</span>
+            </div>
+          </div>
+          <div class="dc-right">
+            <p class="dc-dist">1.2 km</p>
+            <button class="dc-dir" onclick="event.stopPropagation(); openMaps('Mazda Trường Chinh TP HCM')">Chỉ đường</button>
+          </div>
+        </div>
+
+        <div class="dealer-card" onclick="focusMap('mazda-phu-my-hung')">
+          <div class="dc-icon" style="background:linear-gradient(135deg,#c0392b,#e74c3c)">M</div>
+          <div class="dc-info">
+            <p class="dc-name">Mazda Phú Mỹ Hưng</p>
+            <p class="dc-addr">📍 456 Nguyễn Văn Linh, Quận 7, TP.HCM</p>
+            <p class="dc-hours">🕐 8:00 – 18:00 · Thứ 2 đến Chủ nhật</p>
+            <div class="dc-svc-tags">
+              <span class="tag">Bán hàng</span><span class="tag">Dịch vụ</span>
+            </div>
+          </div>
+          <div class="dc-right">
+            <p class="dc-dist">4.8 km</p>
+            <button class="dc-dir" onclick="event.stopPropagation(); openMaps('Mazda Phú Mỹ Hưng TP HCM')">Chỉ đường</button>
+          </div>
+        </div>
+
+        <div class="dealer-card" onclick="focusMap('kia-binh-thanh')">
+          <div class="dc-icon" style="background:linear-gradient(135deg,#2c3e50,#3498db)">K</div>
+          <div class="dc-info">
+            <p class="dc-name">Kia Bình Thạnh</p>
+            <p class="dc-addr">📍 789 Bình Lợi, Bình Thạnh, TP.HCM</p>
+            <p class="dc-hours">🕐 8:00 – 18:00 · Thứ 2 đến Chủ nhật</p>
+            <div class="dc-svc-tags">
+              <span class="tag">Bán hàng</span><span class="tag">Dịch vụ</span>
+            </div>
+          </div>
+          <div class="dc-right">
+            <p class="dc-dist">3.2 km</p>
+            <button class="dc-dir" onclick="event.stopPropagation(); openMaps('Kia Bình Thạnh TP HCM')">Chỉ đường</button>
+          </div>
+        </div>
+
+        <div class="dealer-card">
+          <div class="dc-icon" style="background:linear-gradient(135deg,#6c5ce7,#a29bfe)">P</div>
+          <div class="dc-info">
+            <p class="dc-name">Peugeot Gò Vấp</p>
+            <p class="dc-addr">📍 321 Quang Trung, Gò Vấp, TP.HCM</p>
+            <p class="dc-hours">🕐 8:00 – 18:00 · Thứ 2 đến Thứ 7</p>
+            <div class="dc-svc-tags">
+              <span class="tag">Bán hàng</span><span class="tag">Dịch vụ</span>
+            </div>
+          </div>
+          <div class="dc-right">
+            <p class="dc-dist">6.1 km</p>
+            <button class="dc-dir" onclick="openMaps('Peugeot Gò Vấp TP HCM')">Chỉ đường</button>
+          </div>
+        </div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── SERVICE BOOKING ────────────────────────────────── -->
+  <div id="pg-service-booking" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Đặt lịch dịch vụ</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <div class="info-card">
+        <h3 class="ic-title">Loại dịch vụ</h3>
+        <div class="svc-type-grid">
+          <div class="svc-type selected" onclick="selectSvcType(this,'Bảo dưỡng định kỳ')"><span>🔧</span>Bảo dưỡng định kỳ</div>
+          <div class="svc-type" onclick="selectSvcType(this,'Sửa chữa xe')"><span>🛠</span>Sửa chữa xe</div>
+          <div class="svc-type" onclick="selectSvcType(this,'Bảo hành')"><span>🛡️</span>Bảo hành</div>
+          <div class="svc-type" onclick="selectSvcType(this,'Sơn - Đồng')"><span>🎨</span>Sơn - Đồng</div>
+          <div class="svc-type" onclick="selectSvcType(this,'Phụ kiện')"><span>⚙️</span>Lắp phụ kiện</div>
+          <div class="svc-type" onclick="selectSvcType(this,'Thay lốp')"><span>🔄</span>Thay lốp xe</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Xe của bạn</h3>
+        <div class="vehicle-chip">
+          <img src="assets/mazda_cx5.png" alt="xe" style="height:50px;border-radius:8px;object-fit:cover"/>
+          <div><p style="font-weight:700;font-size:14px">Mazda CX-5 2026</p><p style="font-size:12px;color:#5a7184">51G-123.45</p></div>
+          <button class="cb-btn" style="margin-left:auto">Đổi xe</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Chọn ngày</h3>
+        <div class="date-row" id="date-row">
+          <div class="date-opt" onclick="pickDate(this,'T4','04/06')"><p>T4</p><p>04/06</p></div>
+          <div class="date-opt" onclick="pickDate(this,'T5','05/06')"><p>T5</p><p>05/06</p></div>
+          <div class="date-opt selected" onclick="pickDate(this,'T6','06/06')"><p>T6</p><p>06/06</p></div>
+          <div class="date-opt" onclick="pickDate(this,'T2','09/06')"><p>T2</p><p>09/06</p></div>
+          <div class="date-opt" onclick="pickDate(this,'T3','10/06')"><p>T3</p><p>10/06</p></div>
+          <div class="date-opt" onclick="pickDate(this,'T4','11/06')"><p>T4</p><p>11/06</p></div>
+        </div>
+        <h3 class="ic-title" style="margin-top:14px">Chọn giờ</h3>
+        <div class="time-grid" id="time-grid">
+          <button class="time-opt" onclick="pickTime(this)">8:00</button>
+          <button class="time-opt selected" onclick="pickTime(this)">9:00</button>
+          <button class="time-opt" onclick="pickTime(this)">10:00</button>
+          <button class="time-opt disabled" disabled>11:00</button>
+          <button class="time-opt" onclick="pickTime(this)">13:30</button>
+          <button class="time-opt" onclick="pickTime(this)">14:30</button>
+          <button class="time-opt" onclick="pickTime(this)">15:30</button>
+          <button class="time-opt disabled" disabled>16:30</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Chọn showroom</h3>
+        <div class="showroom-opts">
+          <div class="showroom-opt selected" onclick="pickShowroom(this)">
+            <div><p style="font-weight:700;font-size:13px">Mazda Trường Chinh, Q.12</p><p style="font-size:11px;color:#5a7184">1.2 km · Mở đến 18:00</p></div>
+            <span class="so-check">✓</span>
+          </div>
+          <div class="showroom-opt" onclick="pickShowroom(this)">
+            <div><p style="font-weight:700;font-size:13px">Mazda Phú Mỹ Hưng, Q.7</p><p style="font-size:11px;color:#5a7184">4.8 km · Mở đến 18:00</p></div>
+            <span class="so-check"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Ghi chú thêm (tùy chọn)</h3>
+        <textarea class="note-field" placeholder="VD: Xe có tiếng ồn lạ khi phanh, cần kiểm tra..."></textarea>
+      </div>
+
+      <div style="height:90px"></div>
+    </div>
+    <div class="sticky-footer single">
+      <button class="sf-primary full" onclick="confirmBooking()">Xác nhận đặt lịch</button>
+    </div>
+  </div>
+
+  <!-- ── WARRANTY ───────────────────────────────────────── -->
+  <div id="pg-warranty" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Bảo hành xe</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <div class="warranty-hero-card">
+        <img src="assets/mazda_cx5.png" alt="Mazda CX-5" class="wh-img"/>
+        <div class="wh-info">
+          <div class="wh-badge">🛡️ Đang bảo hành</div>
+          <h3 class="wh-name">Mazda CX-5 2026</h3>
+          <p class="wh-plate">51G-123.45</p>
+          <div class="wh-progress-wrap">
+            <div class="wh-bar"><div class="wh-fill" style="width:35%"></div></div>
+            <div class="wh-dates"><span>20/12/2024</span><span class="wh-rem">Còn 12 tháng</span><span>20/12/2027</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Chi tiết bảo hành</h3>
+        <div class="warranty-items">
+          <div class="wi">
+            <div class="wi-icon">🚗</div>
+            <div class="wi-info">
+              <p class="wi-name">Bảo hành toàn xe</p>
+              <p class="wi-desc">3 năm hoặc 100,000 km · đến 20/12/2027</p>
+            </div>
+            <span class="wi-status ok">Còn HH</span>
+          </div>
+          <div class="wi">
+            <div class="wi-icon">⚙️</div>
+            <div class="wi-info">
+              <p class="wi-name">Bảo hành động cơ & hộp số</p>
+              <p class="wi-desc">5 năm hoặc 150,000 km · đến 20/12/2029</p>
+            </div>
+            <span class="wi-status ok">Còn HH</span>
+          </div>
+          <div class="wi">
+            <div class="wi-icon">🎨</div>
+            <div class="wi-info">
+              <p class="wi-name">Bảo hành chống gỉ thân xe</p>
+              <p class="wi-desc">5 năm · đến 20/12/2029</p>
+            </div>
+            <span class="wi-status ok">Còn HH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <button class="btn-cta" onclick="showModal('🛡️','Yêu cầu đã gửi!','Đội ngũ kỹ thuật sẽ liên hệ trong vòng 2 giờ làm việc.')">Gửi yêu cầu bảo hành</button>
+        <button class="btn-outline-full mt-8">Xem chính sách bảo hành đầy đủ</button>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── REGISTRATION ────────────────────────────────────── -->
+  <div id="pg-registration" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Đăng kiểm & Đăng ký</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <div class="reg-hero">
+        <div class="reg-icon">📋</div>
+        <h2>Hỗ trợ đăng kiểm & đăng ký xe</h2>
+        <p>THACO Auto hỗ trợ toàn bộ thủ tục – bạn chỉ cần ký tên!</p>
+      </div>
+      <div class="info-card">
+        <h3 class="ic-title">Dịch vụ đăng ký xe mới</h3>
+        <div class="reg-steps">
+          <div class="rs"><div class="rs-num">1</div><div><p class="rs-name">Chuẩn bị hồ sơ</p><p class="rs-desc">THACO hỗ trợ kiểm tra hồ sơ cần thiết</p></div></div>
+          <div class="rs"><div class="rs-num">2</div><div><p class="rs-name">Nộp hồ sơ đăng ký</p><p class="rs-desc">Tại cục đăng ký hoặc dịch vụ online</p></div></div>
+          <div class="rs"><div class="rs-num">3</div><div><p class="rs-name">Đăng kiểm kỹ thuật</p><p class="rs-desc">Đưa xe đến trung tâm đăng kiểm</p></div></div>
+          <div class="rs"><div class="rs-num">4</div><div><p class="rs-name">Nhận biển số xe</p><p class="rs-desc">Sau 5-7 ngày làm việc</p></div></div>
+        </div>
+      </div>
+      <div class="info-card">
+        <h3 class="ic-title">Nhắc lịch đăng kiểm</h3>
+        <div class="reminder-card">
+          <div class="rm-icon">⏰</div>
+          <div>
+            <p style="font-weight:700">Đăng kiểm lần tới</p>
+            <p style="font-size:13px;color:#5a7184">Tháng 06/2027 · Còn 12 tháng</p>
+          </div>
+          <button class="cb-btn">Đặt nhắc</button>
+        </div>
+      </div>
+      <div class="info-card">
+        <button class="btn-cta" onclick="showModal('📋','Đã ghi nhận!','Tư vấn viên sẽ liên hệ hỗ trợ thủ tục đăng kiểm trong 1 giờ làm việc.')">Yêu cầu hỗ trợ ngay</button>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── FINANCE ─────────────────────────────────────────── -->
+  <div id="pg-finance" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Tính toán vay mua xe</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <div class="finance-result-card">
+        <p class="fr-label">Trả góp ước tính</p>
+        <p class="fr-amount" id="fr-amount">~9.8 triệu/tháng</p>
+        <p class="fr-note">Lãi suất 8.5%/năm · Vay 559 triệu trong 60 tháng</p>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Giá xe: <span id="lbl-price" class="ic-val">799 triệu</span></h3>
+        <input type="range" class="fin-slider" id="sl-price" min="400" max="2000" value="799" oninput="calcFin()"/>
+        <div class="sl-minmax"><span>400M</span><span>2,000M</span></div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Trả trước: <span id="lbl-dp" class="ic-val">30%</span></h3>
+        <div class="chip-row" id="dp-chips">
+          <button class="chip" onclick="selectFin(this,'dp',20)">20%</button>
+          <button class="chip active" onclick="selectFin(this,'dp',30)">30%</button>
+          <button class="chip" onclick="selectFin(this,'dp',40)">40%</button>
+          <button class="chip" onclick="selectFin(this,'dp',50)">50%</button>
+        </div>
+        <p class="dp-amount" id="dp-amount">Số tiền trả trước: ~239.7 triệu</p>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Thời hạn vay: <span id="lbl-term" class="ic-val">60 tháng</span></h3>
+        <div class="chip-row" id="term-chips">
+          <button class="chip" onclick="selectFin(this,'term',36)">36 tháng</button>
+          <button class="chip" onclick="selectFin(this,'term',48)">48 tháng</button>
+          <button class="chip active" onclick="selectFin(this,'term',60)">60 tháng</button>
+          <button class="chip" onclick="selectFin(this,'term',72)">72 tháng</button>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3 class="ic-title">Ngân hàng hỗ trợ</h3>
+        <div class="bank-list">
+          <div class="bank-item"><div class="bank-logo vcb">VCB</div><div><p style="font-weight:700;font-size:13px">Vietcombank</p><p style="font-size:11px;color:#5a7184">Lãi suất từ 7.5%/năm</p></div><span class="wi-status ok">Ưu đãi</span></div>
+          <div class="bank-item"><div class="bank-logo tcb">TCB</div><div><p style="font-weight:700;font-size:13px">Techcombank</p><p style="font-size:11px;color:#5a7184">Lãi suất từ 7.9%/năm</p></div><span class="wi-status ok">Ưu đãi</span></div>
+          <div class="bank-item"><div class="bank-logo acb">ACB</div><div><p style="font-weight:700;font-size:13px">ACB</p><p style="font-size:11px;color:#5a7184">Lãi suất từ 8.2%/năm</p></div></div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <button class="btn-cta" onclick="showModal('💰','Đã gửi yêu cầu!','Chuyên viên tư vấn tài chính sẽ gọi cho bạn trong 30 phút làm việc.')">Liên hệ tư vấn vay ngay</button>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── CHAT ───────────────────────────────────────────── -->
+  <div id="pg-chat" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <div class="chat-agent-info">
+        <div class="ca-avatar">🧑‍💼</div>
+        <div><p class="ca-name">Tư vấn bán hàng – Minh</p><p class="ca-online">● Đang trực tuyến</p></div>
+      </div>
+      <button class="hdr-icon">📞</button>
+    </header>
+    <div class="chat-messages" id="chat-msgs">
+      <div class="chat-date">Hôm nay, 15:00</div>
+      <div class="msg-row agent">
+        <div class="msg-av">🧑‍💼</div>
+        <div class="msg-bubble">Xin chào anh Nguyễn Văn A! Tôi là Minh – tư vấn bán hàng. Tôi có thể hỗ trợ gì cho anh hôm nay ạ? 😊</div>
+      </div>
+      <div class="quick-replies">
+        <button class="qr" onclick="chatSend('Xe tôi đang ở bước nào rồi?')">📦 Tiến độ đơn hàng</button>
+        <button class="qr" onclick="chatSend('Khi nào xe về showroom?')">📅 Lịch giao xe</button>
+        <button class="qr" onclick="chatSend('Tôi muốn đặt lịch nhận xe')">🗓 Đặt lịch nhận xe</button>
+      </div>
+    </div>
+    <div class="chat-input-bar">
+      <button class="cib-attach">📎</button>
+      <input type="text" id="chat-input" class="cib-input" placeholder="Nhập tin nhắn..." onkeydown="if(event.key==='Enter')chatSend()"/>
+      <button class="cib-send" onclick="chatSend()">➤</button>
+    </div>
+  </div>
+
+  <!-- ── PROFILE ─────────────────────────────────────────── -->
+  <div id="pg-profile" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Tài khoản</h2>
+      <button class="hdr-icon">⚙️</button>
+    </header>
+    <div class="page-scroll">
+      <div class="profile-card">
+        <div class="prof-av">NV</div>
+        <h2 class="prof-name">Nguyễn Văn A</h2>
+        <p class="prof-contact">0901 234 567 · nguyenvana@gmail.com</p>
+        <div class="member-pill">🥇 Thành viên Vàng · 1,250 điểm</div>
+      </div>
+
+      <div class="menu-group">
+        <p class="mg-title">Thông tin cá nhân</p>
+        <div class="menu-item" onclick="showToast('Đang mở chỉnh sửa hồ sơ...')"><span>👤</span><span class="mi-lbl">Chỉnh sửa hồ sơ</span><span class="mi-arr">›</span></div>
+        <div class="menu-item" onclick="navigate('pg-my-vehicle')"><span>🚗</span><span class="mi-lbl">Xe của tôi</span><span class="mi-arr">›</span></div>
+        <div class="menu-item" onclick="navigate('pg-order-tracking')"><span>📦</span><span class="mi-lbl">Đơn hàng</span><span class="mi-arr">›</span></div>
+
+        <p class="mg-title">Dịch vụ</p>
+        <div class="menu-item" onclick="navigate('pg-warranty')"><span>🛡️</span><span class="mi-lbl">Bảo hành xe</span><span class="mi-arr">›</span></div>
+        <div class="menu-item" onclick="navigate('pg-service-booking')"><span>🔧</span><span class="mi-lbl">Lịch bảo dưỡng</span><span class="mi-arr">›</span></div>
+        <div class="menu-item" onclick="navigate('pg-finance')"><span>💰</span><span class="mi-lbl">Tài chính vay xe</span><span class="mi-arr">›</span></div>
+
+        <p class="mg-title">Cài đặt</p>
+        <div class="menu-item"><span>🔔</span><span class="mi-lbl">Thông báo</span><span class="mi-arr">›</span></div>
+        <div class="menu-item"><span>🌐</span><span class="mi-lbl">Ngôn ngữ</span><span class="mi-badge">Tiếng Việt</span><span class="mi-arr">›</span></div>
+        <div class="menu-item"><span>❓</span><span class="mi-lbl">Trợ giúp & FAQ</span><span class="mi-arr">›</span></div>
+        <div class="menu-item logout-item" onclick="navigate('pg-login')"><span>🚪</span><span class="mi-lbl" style="color:#ef4444">Đăng xuất</span><span class="mi-arr">›</span></div>
+      </div>
+
+      <p class="app-ver">THACO Auto v1.0.0 · © 2026 THACO Group</p>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── MY VEHICLE ─────────────────────────────────────── -->
+  <div id="pg-my-vehicle" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Xe của tôi</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <div class="my-car-card">
+        <img src="assets/mazda_cx5.png" alt="Mazda CX-5" class="mcc-img"/>
+        <div class="mcc-info">
+          <span class="clc-brand">Mazda</span>
+          <h2 class="mcc-name">CX-5 2026</h2>
+          <p class="mcc-plate">Biển số: 51G-123.45</p>
+          <div class="mcc-stats">
+            <div class="mcs"><span class="mcs-v">23,450</span><span class="mcs-l">km đã đi</span></div>
+            <div class="mcs"><span class="mcs-v">12 tháng</span><span class="mcs-l">bảo hành</span></div>
+            <div class="mcs"><span class="mcs-v">06/2027</span><span class="mcs-l">đăng kiểm</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="info-card">
+        <h3 class="ic-title">Tình trạng xe</h3>
+        <div class="health-list">
+          <div class="hl-item"><div class="hl-top"><span>Dầu động cơ</span><span class="status-good">Tốt</span></div><div class="hl-bar"><div class="hl-fill" style="width:78%;background:#22c55e"></div></div></div>
+          <div class="hl-item"><div class="hl-top"><span>Lốp xe</span><span class="status-warn">Cần kiểm tra</span></div><div class="hl-bar"><div class="hl-fill" style="width:45%;background:#f59e0b"></div></div></div>
+          <div class="hl-item"><div class="hl-top"><span>Ắc quy</span><span class="status-good">Tốt</span></div><div class="hl-bar"><div class="hl-fill" style="width:85%;background:#22c55e"></div></div></div>
+          <div class="hl-item"><div class="hl-top"><span>Hệ thống phanh</span><span class="status-good">Tốt</span></div><div class="hl-bar"><div class="hl-fill" style="width:90%;background:#22c55e"></div></div></div>
+        </div>
+        <button class="btn-outline-full mt-8" onclick="navigate('pg-service-booking')">Đặt lịch kiểm tra</button>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATIONS ──────────────────────────────────── -->
+  <div id="pg-notifications" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Thông báo</h2>
+      <button class="hdr-icon text-btn">Đọc tất cả</button>
+    </header>
+    <div class="page-scroll">
+      <div class="notif-item unread" onclick="navigate('pg-order-tracking')">
+        <div class="ni-icon" style="background:rgba(26,111,212,.12)">🏭</div>
+        <div class="ni-body"><p class="ni-title">Xe đang kiểm định chất lượng</p><p class="ni-desc">Mazda CX-5 (HD-2026-X987) tại Chu Lai. Dự kiến xuất kho 25/06.</p><p class="ni-time">Hôm nay, 14:30</p></div>
+      </div>
+      <div class="notif-item unread" onclick="navigate('pg-service-booking')">
+        <div class="ni-icon" style="background:rgba(245,158,11,.12)">🔧</div>
+        <div class="ni-body"><p class="ni-title">Nhắc bảo dưỡng định kỳ</p><p class="ni-desc">Xe đã đi 23,450 km. Hãy đặt lịch bảo dưỡng sớm để xe luôn tốt.</p><p class="ni-time">Hôm nay, 9:00</p></div>
+      </div>
+      <div class="notif-item">
+        <div class="ni-icon" style="background:rgba(168,85,247,.12)">🎁</div>
+        <div class="ni-body"><p class="ni-title">Ưu đãi phụ kiện – Giảm 20%</p><p class="ni-desc">Áp dụng đến 30/06/2026. Mua ngay tại showroom hoặc qua app.</p><p class="ni-time">03/06/2026</p></div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── TEST DRIVE ─────────────────────────────────────── -->
+  <div id="pg-test-drive" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Đăng ký lái thử</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <img src="assets/mazda_cx5.png" alt="Mazda CX-5" style="width:100%;border-radius:16px;object-fit:cover;height:180px;margin-top:8px"/>
+      <div class="info-card" style="margin-top:12px">
+        <h3 class="ic-title">Thông tin đăng ký</h3>
+        <div class="field-group"><label>Họ và tên</label><div class="field-wrap"><span class="fi">👤</span><input type="text" value="Nguyễn Văn A"/></div></div>
+        <div class="field-group"><label>Số điện thoại</label><div class="field-wrap"><span class="fi">📱</span><input type="tel" value="0901 234 567"/></div></div>
+        <div class="field-group"><label>Dòng xe muốn lái thử</label><div class="field-wrap"><span class="fi">🚗</span><input type="text" value="Mazda CX-5 2026"/></div></div>
+        <div class="field-group"><label>Showroom</label><div class="field-wrap"><span class="fi">📍</span><input type="text" value="Mazda Trường Chinh, Q.12 TP.HCM"/></div></div>
+      </div>
+      <div class="info-card">
+        <h3 class="ic-title">Chọn ngày lái thử</h3>
+        <div class="date-row">
+          <div class="date-opt" onclick="pickDate(this,'T6','07/06')"><p>T6</p><p>07/06</p></div>
+          <div class="date-opt selected" onclick="pickDate(this,'T2','09/06')"><p>T2</p><p>09/06</p></div>
+          <div class="date-opt" onclick="pickDate(this,'T3','10/06')"><p>T3</p><p>10/06</p></div>
+        </div>
+      </div>
+      <div style="height:90px"></div>
+    </div>
+    <div class="sticky-footer single">
+      <button class="sf-primary full" onclick="showModal('🚗','Đăng ký thành công!','Hẹn gặp bạn tại Mazda Trường Chinh vào Thứ 2, 09/06 lúc 9:00. TVBH sẽ gọi xác nhận!')">Xác nhận đăng ký</button>
+    </div>
+  </div>
+
+  <!-- ── ACCESSORIES ────────────────────────────────────── -->
+  <div id="pg-accessories" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Phụ kiện chính hãng</h2>
+      <button class="hdr-icon">🔍</button>
+    </header>
+    <div class="page-scroll">
+      <div class="promo-banner-full">🎉 Giảm 20% tất cả phụ kiện đến 30/06/2026</div>
+      <div class="acc-grid">
+        <div class="acc-item" onclick="showToast('✅ Đã thêm vào giỏ hàng!')">
+          <div class="acc-img">🎥</div>
+          <p class="acc-name">Camera 360° chính hãng</p>
+          <div class="acc-price"><s>8 triệu</s> <strong>6.4 triệu</strong></div>
+          <button class="acc-btn">Thêm vào giỏ</button>
+        </div>
+        <div class="acc-item" onclick="showToast('✅ Đã thêm vào giỏ hàng!')">
+          <div class="acc-img">🛡️</div>
+          <p class="acc-name">Film cách nhiệt Llumar</p>
+          <div class="acc-price"><s>5 triệu</s> <strong>4 triệu</strong></div>
+          <button class="acc-btn">Thêm vào giỏ</button>
+        </div>
+        <div class="acc-item" onclick="showToast('✅ Đã thêm vào giỏ hàng!')">
+          <div class="acc-img">🪑</div>
+          <p class="acc-name">Bọc ghế da thật</p>
+          <div class="acc-price"><s>12 triệu</s> <strong>9.6 triệu</strong></div>
+          <button class="acc-btn">Thêm vào giỏ</button>
+        </div>
+        <div class="acc-item" onclick="showToast('✅ Đã thêm vào giỏ hàng!')">
+          <div class="acc-img">🔈</div>
+          <p class="acc-name">Nâng cấp loa BOSE</p>
+          <div class="acc-price"><s>15 triệu</s> <strong>12 triệu</strong></div>
+          <button class="acc-btn">Thêm vào giỏ</button>
+        </div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+  <!-- ── SERVICE SUPPORT ────────────────────────────────── -->
+  <div id="pg-service-support" class="page hidden">
+    <header class="sub-header">
+      <button class="back-btn" onclick="goBack()">‹</button>
+      <h2>Hỗ trợ khách hàng</h2>
+      <span></span>
+    </header>
+    <div class="page-scroll">
+      <div class="support-hero-card">
+        <div style="font-size:52px;margin-bottom:12px">🆘</div>
+        <h2 style="font-size:18px;font-weight:700;margin-bottom:6px">Chúng tôi luôn sẵn sàng</h2>
+        <p style="font-size:14px;color:#5a7184">Hotline 24/7: <strong>1800 xxxx</strong></p>
+      </div>
+      <div class="support-opts">
+        <div class="supp-opt" onclick="navigate('pg-chat')"><span class="so-ic">💬</span><div><p class="so-nm">Chat với tư vấn viên</p><p class="so-ds">Phản hồi trong 5 phút</p></div><span>›</span></div>
+        <div class="supp-opt"><span class="so-ic">📞</span><div><p class="so-nm">Gọi điện</p><p class="so-ds">1800 xxxx – miễn phí</p></div><span>›</span></div>
+        <div class="supp-opt"><span class="so-ic">🚨</span><div><p class="so-nm">Cứu hộ khẩn cấp</p><p class="so-ds">Đến nơi trong 60 phút</p></div><span>›</span></div>
+        <div class="supp-opt"><span class="so-ic">📝</span><div><p class="so-nm">Gửi khiếu nại</p><p class="so-ds">Xử lý trong 24h</p></div><span>›</span></div>
+      </div>
+      <div style="height:30px"></div>
+    </div>
+  </div>
+
+</div><!-- /app-root -->
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- MODAL -->
+<div id="modal-bg" class="modal-bg hidden" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div id="m-icon" class="m-icon">✅</div>
+    <h3 id="m-title">Thành công!</h3>
+    <p id="m-desc">Đã hoàn thành.</p>
+    <button class="btn-cta" onclick="closeModal()">OK, đóng lại</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
